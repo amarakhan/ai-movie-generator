@@ -1,28 +1,17 @@
+html {
+    padding: 0;
+}
+
 body, html {
     margin: 0;
-    padding: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
     font-family: Arial, sans-serif;
 }
 
-.background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: white;
-    overflow: hidden;
-    z-index: -1;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    z-index: 1;
+body {
+    padding-bottom: 10px 0;
 }
 
 h1 {
@@ -40,6 +29,46 @@ button {
     border-radius: 5px;
 }
 
+/* ids */
+#moodButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#moodButtons button {
+    width: calc(33.33% - 10px);
+    margin: 5px;
+    box-sizing: border-box;
+}
+
+/* classes */
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.container,.container-2 {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    z-index: 1;
+}
+
+.container-2 {
+    overflow: scroll;
+}
+
 .popcorn {
     position: absolute;
     width: 30px;
@@ -48,6 +77,39 @@ button {
     animation: float 10s infinite;
 }
 
+.hidden {
+    display: none;
+}
+
+/* styles for movies div */
+#movies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: 70vh;
+    overflow: scroll;
+}
+
+.movie {
+    /* width: calc(33.33% - 10px); */
+    margin: 0 20px;
+    /* box-sizing: border-box; */
+}
+
+.movie h3 {
+    max-width: 140px;
+}
+
+img.poster {
+    width: 140px;
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    /* add border shadow */
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* key frame animations */
 @keyframes float {
     0% {
         transform: translateY(100vh);
