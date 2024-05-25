@@ -13,15 +13,16 @@
             <h1>🍿 Movie by Mood 🍿</h1>
             <button id="getMoods">Generate Moods</button>
             <section>
-                <p>Using an Antrhopic AI llm, Claude, to suggest a movie by a mood</p>
+                <p>Use AI (Claude llm) to recommend a movie by selected mood.</p>
             </section>
         </div>
         <div class="container-2 hidden" id="moodContainer">
             <h2>🫵 Choose a Mood 🫵</h2>
             <div class="moods" id="moodButtons"></div>
+            <div id="loading"></div>
         </div>
         <div class="container-2 hidden" id="movieContainer">
-            <h2>🎬 Movie Suggestion 🎬</h2>
+            <h2>🎬 Movie Suggestions 🎬</h2>
             <div class="movies" id="movies"></div>
             <button id="backToHome">Let's try another mood</button>
         </div>
