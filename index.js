@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const axios = require('axios');
 const Anthropic = require("@anthropic-ai/sdk");
+const NodeCache = require('node-cache');
 const dotenv = require('dotenv');
 
 
@@ -14,7 +15,8 @@ dotenv.config();
 const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
 const omdbApiKey = process.env.OMDB_API_KEY;
 
-// TODO implement caching
+// ### CACHE ###
+const myCache = new NodeCache();
 
 const fetchMovieData = async (searchTerm) => {
     try {
@@ -33,60 +35,72 @@ const fetchMovieData = async (searchTerm) => {
 
 const fetchMovies = async (req, res) => {
     const mood = req.query.mood || req.body.mood;
+    const reload = req.query.reload || req.body.reload;
+
+    if (reload) {
+        myCache.del(mood);
+    } else {
+        const cachedData = myCache.get(mood);
+        if (cachedData) {
+            console.log('Cache hit');
+            return res.status(200).json(cachedData);
+        }
+    }
 
     if (!mood) {
         res.status(400).json({ error: "No mood provided"});
         return;
     }
 
-    // const anthropic = new Anthropic({
-    //     apiKey: anthropicApiKey,
-    // });
-
-    // {
-    //     id: '',
-    //     type: 'message',
-    //     role: 'assistant',
-    //     model: 'claude-3-opus-20240229',
-    //     content: [
-    //       {
-    //         type: 'text',
-    //         text: "Happy Gilmore, The Pursuit of Happyness, Singin' in the Rain, Amelie"
-    //       }
-    //     ],
-    //     stop_reason: 'end_turn',
-    //     stop_sequence: null,
-    //     usage: { input_tokens: 46, output_tokens: 28 }
-    //   }
-
-
-    //     const msg = await anthropic.messages.create({
-    //             model: "claude-3-opus-20240229",
-    //             max_tokens: 1000,
-    //             temperature: 0,
-    //             system: "I am a movie name generator. Respond ONLY with movie names, that are comma separated.",
-    //             messages: [
-    //                 {
-    //                     "role": "user",
-    //                     "content": [
-    //                         {
-    //                             "type": "text",
-    //                             "text": `I'm feeling \"${mood}\". Can you recommend 4 movies for me to watch? `
-    //                         }
-    //                     ]
-    //                 }
-    //             ]
-    //         });
-    //     console.log(msg);
-
-    //     const usage = msg.usage || {};
-    //     const movies = msg.content[0].text.split(',').map(movie => movie.trim());
-       
     try {
-        // Mocked movie list, replace with actual API call to Anthropic if needed
-        const movies = ['Happy Gilmore', 'The Pursuit of Happyness', 'Singin\' in the Rain', 'Amelie'];
-        const movieDetails = [];
 
+        const anthropic = new Anthropic({
+            apiKey: anthropicApiKey,
+        });
+
+        // {
+        //     id: '',
+        //     type: 'message',
+        //     role: 'assistant',
+        //     model: 'claude-3-opus-20240229',
+        //     content: [
+        //     {
+        //         type: 'text',
+        //         text: "Happy Gilmore, The Pursuit of Happyness, Singin' in the Rain, Amelie"
+        //     }
+        //     ],
+        //     stop_reason: 'end_turn',
+        //     stop_sequence: null,
+        //     usage: { input_tokens: 46, output_tokens: 28 }
+        // }
+
+        const msg = await anthropic.messages.create({
+                model: "claude-3-opus-20240229",
+                max_tokens: 1000,
+                temperature: 0,
+                system: "I am a movie name generator. Respond ONLY with movie names, that are comma separated.",
+                messages: [
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": `I'm feeling \"${mood}\". Can you recommend 4 movies for me to watch? `
+                            }
+                        ]
+                    }
+                ]
+            });
+        console.log(msg);
+
+        const usage = msg.usage || {};
+        const movies = msg.content[0].text.split(',').map(movie => movie.trim());
+       
+        // #### Mocked movie list
+        // const movies = ['Happy Gilmore', 'The Pursuit of Happyness', 'Singin\' in the Rain', 'Amelie'];
+        // #### 
+
+        const movieDetails = [];
         for (const movieTitle of movies) {
             try {
                 const movieResponse = await fetchMovieData(movieTitle);
@@ -106,8 +120,12 @@ const fetchMovies = async (req, res) => {
             return res.status(500).json({ error: "Error fetching movie data"});
         }
 
-        const usage = {};
-        return res.status(200).json({ data: movieDetails, usage: usage, model: "claude-3-opus-20240229"});
+        const returnData = { data: movieDetails, usage: usage, model: "claude-3-opus-20240229"};
+
+        // Cache the data
+        myCache.set(mood, {...returnData, fromCache: 1 }, 86400); // TTL is 86,400 seconds (24 hours)
+
+        return res.status(200).json(returnData);
     } catch (error) {
         console.error('Error:', error);
         return res.status(500).json({ error: "Error fetching movie data"});
