@@ -19,6 +19,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("backToHome").addEventListener("click", () => {
         displayContainer("moodContainer");
     });
+
+    document.getElementById("refreshOptions").addEventListener("click", () => {
+        displayMoods();
+    });
 });
 
 const moods = [

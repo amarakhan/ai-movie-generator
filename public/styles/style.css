@@ -76,6 +76,14 @@ button {
     box-sizing: border-box;
 }
 
+#backToHome, #refreshOptions {
+    margin-top: 10px;
+}
+
+#refreshOptions {
+    background-color: #dc6161;
+}
+
 /* movies div */
 #movies {
     display: flex;
