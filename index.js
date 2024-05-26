@@ -18,6 +18,7 @@ const omdbApiKey = process.env.OMDB_API_KEY;
 // ### CACHE ###
 const myCache = new NodeCache();
 
+// ### FUNCTIONS ###
 const fetchMovieData = async (searchTerm) => {
     try {
         const response = await axios.get('http://www.omdbapi.com/',{
