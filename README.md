@@ -1,6 +1,8 @@
 
 # AI Movie Generator
 
+**Live Deployment:** [AI Movie Generator](https://ai-movie-generator.fly.dev/)
+
 AI Movie Generator is a Node.js application that recommends movies based on the user's mood using the OMDB API and Anthropic AI.
 
 ## Table of Contents
