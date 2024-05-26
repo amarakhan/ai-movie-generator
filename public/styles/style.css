@@ -19,30 +19,6 @@ h1 {
     margin-bottom: 20px;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 1em;
-    cursor: pointer;
-    background-color: #000;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-}
-
-/* ids */
-#moodButtons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-#moodButtons button {
-    width: calc(33.33% - 10px);
-    margin: 5px;
-    box-sizing: border-box;
-}
-
-/* classes */
 .background {
     position: absolute;
     width: 100%;
@@ -75,6 +51,29 @@ button {
     height: 30px;
     background: url('/assets/popcorn.png') no-repeat center center / cover;
     animation: float 10s infinite;
+}
+
+/* buttons */
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+#moodButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#moodButtons button {
+    width: calc(33.33% - 10px);
+    margin: 5px;
+    box-sizing: border-box;
 }
 
 /* movies div */
@@ -150,6 +149,15 @@ img.poster {
     }
     40% {
         opacity: 1;
+    }
+}
+
+/* Media query for small screens */
+@media (max-width: 450px) {
+    #moodButtons button {
+        width: 100%;
+         /* Adjust the width to 50% for two columns */
+         /* width: calc(50% - 10px); */
     }
 }
 
