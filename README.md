@@ -17,7 +17,7 @@ AI Movie Generator is a Node.js application that recommends movies based on the 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/ai-movie-generator.git
+   git clone https://github.com/amarakhan/ai-movie-generator.git
    ```
 
 2. Navigate to the project directory:
