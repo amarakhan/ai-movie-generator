@@ -91,6 +91,7 @@ button {
     justify-content: center;
     max-height: 70vh;
     overflow: scroll;
+    padding-top: 10px;
 }
 
 .movie {
@@ -166,6 +167,13 @@ img.poster {
         width: 100%;
          /* Adjust the width to 50% for two columns */
          /* width: calc(50% - 10px); */
+    }
+}
+
+@media (max-height: 450px) {
+    #movies {
+        max-height: 100vh;
+    
     }
 }
 
