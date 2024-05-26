@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie by Mood</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="container-2" id="introContainer">
+            <h1>🍿 Movie by Mood 🍿</h1>
+            <button id="getMoods">Generate Moods</button>
+            <section>
+                <p>Use AI (Claude llm) to recommend a movie by selected mood.</p>
+            </section>
+        </div>
+        <div class="container-2 hidden" id="moodContainer">
+            <h2>🫵 Choose a Mood 🫵</h2>
+            <div class="moods" id="moodButtons"></div>
+            <div id="loading"></div>
+        </div>
+        <div class="container-2 hidden" id="movieContainer">
+            <h2>🎬 Movie Suggestions 🎬</h2>
+            <div class="movies" id="movies"></div>
+            <button id="backToHome">Let's try another mood</button>
+        </div>
+    </div>
+    <script src="/scripts/main.js"></script>
+</body>
+</html>
