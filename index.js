@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const axios = require('axios');
-const Anthropic = require("@anthropic-ai/sdk");
+const OpenAI = require("openai");
 const NodeCache = require('node-cache');
 const dotenv = require('dotenv');
 
@@ -12,7 +12,8 @@ app.use(express.json());
 
 // ### CONFIGURE ENVIRONMENT ###
 dotenv.config();
-const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+const deepseekApiKey = process.env.DEEPSEEK_API_KEY;
+const deepseekBaseUrl = "https://api.deepseek.com/v1";
 const omdbApiKey = process.env.OMDB_API_KEY;
 
 // ### CACHE ###
@@ -54,52 +55,30 @@ const fetchMovies = async (req, res) => {
     }
 
     try {
-
-        const anthropic = new Anthropic({
-            apiKey: anthropicApiKey,
+        const openai = new OpenAI({
+            apiKey: deepseekApiKey,
+            baseURL: deepseekBaseUrl,
         });
 
-        // {
-        //     id: '',
-        //     type: 'message',
-        //     role: 'assistant',
-        //     model: 'claude-3-opus-20240229',
-        //     content: [
-        //     {
-        //         type: 'text',
-        //         text: "Happy Gilmore, The Pursuit of Happyness, Singin' in the Rain, Amelie"
-        //     }
-        //     ],
-        //     stop_reason: 'end_turn',
-        //     stop_sequence: null,
-        //     usage: { input_tokens: 46, output_tokens: 28 }
-        // }
+        const completion = await openai.chat.completions.create({
+            model: "deepseek-chat",
+            max_tokens: 1000,
+            temperature: 0,
+            messages: [
+                {
+                    role: "system",
+                    content: "I am a movie name generator. Respond ONLY with movie names, that are comma separated."
+                },
+                {
+                    role: "user",
+                    content: `I'm feeling \"${mood}\". Can you recommend 4 movies for me to watch? `
+                }
+            ]
+        });
 
-        const msg = await anthropic.messages.create({
-                model: "claude-3-opus-20240229",
-                max_tokens: 1000,
-                temperature: 0,
-                system: "I am a movie name generator. Respond ONLY with movie names, that are comma separated.",
-                messages: [
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": `I'm feeling \"${mood}\". Can you recommend 4 movies for me to watch? `
-                            }
-                        ]
-                    }
-                ]
-            });
-        console.log(msg);
-
-        const usage = msg.usage || {};
-        const movies = msg.content[0].text.split(',').map(movie => movie.trim());
-       
-        // #### Mocked movie list
-        // const movies = ['Happy Gilmore', 'The Pursuit of Happyness', 'Singin\' in the Rain', 'Amelie'];
-        // #### 
+        const usage = completion.usage || {};
+        const text = completion.choices[0].message.content;
+        const movies = text.split(',').map(movie => movie.trim());
 
         const movieDetails = [];
         for (const movieTitle of movies) {
@@ -121,7 +100,7 @@ const fetchMovies = async (req, res) => {
             return res.status(500).json({ error: "Error fetching movie data"});
         }
 
-        const returnData = { data: movieDetails, usage: usage, model: "claude-3-opus-20240229"};
+        const returnData = { data: movieDetails, usage: usage, model: "deepseek-chat"};
 
         // Cache the data
         myCache.set(mood, {...returnData, fromCache: 1 }, 86400); // TTL is 86,400 seconds (24 hours)
