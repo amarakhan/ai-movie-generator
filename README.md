@@ -3,7 +3,7 @@
 
 **Live Deployment:** [AI Movie Generator](https://ai-movie-generator.fly.dev/)
 
-AI Movie Generator is a Node.js application that recommends movies based on the user's mood using the OMDB API and Anthropic AI.
+AI Movie Generator is a Node.js application that recommends movies tailored to your mood, leveraging the OMDB API and DeepSeek’s AI through the OpenAI SDK.
 
 ## Table of Contents
 
@@ -32,11 +32,12 @@ AI Movie Generator is a Node.js application that recommends movies based on the 
    npm install
    ```
 
-4. Create a `.env` file in the root directory and add your API keys:
+4. Create a `.env` file in the root directory and add your API keys and configuration:
 
    ```env
-   ANTHROPIC_API_KEY=your_anthropic_api_key
-   OMDB_API_KEY=your_omdb_api_key
+   DEEPSEEK_API_KEY=your_deepseek_api_key   # Required: API key for DeepSeek AI (used for movie recommendations)
+   OMDB_API_KEY=your_omdb_api_key           # Required: API key for OMDB (used to fetch movie details)
+   PORT=3000                                # Optional: Port for the server (defaults to 3000 if not set)
    ```
 
 ## Usage
