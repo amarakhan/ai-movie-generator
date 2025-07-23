@@ -100,7 +100,7 @@ curl -X GET "http://localhost:3000/movies?mood=happy"
     }
   ],
   "usage": {},
-  "model": "claude-3-opus-20240229"
+  "model": "deepseek-chat"
 }
 ```
 
